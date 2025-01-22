@@ -1,8 +1,8 @@
 {
-   "name": "core",
-   "$schema": "../node_modules/nx/schemas/project-schema.json",
-   "sourceRoot": "libs/src",
-   "prefix": "lib",
+   "name": "widgets",
+   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+   "sourceRoot": "libs/widgets/src",
+   "prefix": "biz",
    "projectType": "library",
    "tags": [],
    "targets": {
@@ -10,14 +10,15 @@
          "executor": "@nx/angular:ng-packagr-lite",
          "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
          "options": {
-            "project": "libs/ng-package.json"
+            "project": "libs/widgets/ng-package.json",
+            "tailwindConfig": "libs/widgets/tailwind.config.js"
          },
          "configurations": {
             "production": {
-               "tsConfig": "libs/tsconfig.lib.prod.json"
+               "tsConfig": "libs/widgets/tsconfig.lib.prod.json"
             },
             "development": {
-               "tsConfig": "libs/tsconfig.lib.json"
+               "tsConfig": "libs/widgets/tsconfig.lib.json"
             }
          },
          "defaultConfiguration": "production"
@@ -26,7 +27,7 @@
          "executor": "@nx/jest:jest",
          "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
          "options": {
-            "jestConfig": "libs/jest.config.ts"
+            "jestConfig": "libs/widgets/jest.config.ts"
          }
       },
       "lint": {

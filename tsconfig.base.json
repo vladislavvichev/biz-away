@@ -15,7 +15,8 @@
       "skipDefaultLibCheck": true,
       "baseUrl": ".",
       "paths": {
-         "@biz-away/core": ["libs/src/index.ts"]
+         "@biz-away/core": ["libs/core/src/index.ts"],
+         "@biz-away/widgets": ["libs/widgets/src/index.ts"]
       }
    },
    "exclude": ["node_modules", "tmp"]
