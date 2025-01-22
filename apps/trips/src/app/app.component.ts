@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { APP_IMPORTS } from './app.imports';
 
 @Component({
-  standalone: true,
-  imports: [NxWelcomeComponent, RouterModule],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+   selector: 'app-root',
+   templateUrl: './app.component.html',
+   styleUrl: './app.component.scss',
+   imports: APP_IMPORTS,
+   standalone: true
 })
 export class AppComponent {
-  title = 'trips';
+   public title: string = 'trips';
 }
