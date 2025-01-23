@@ -1,1 +1,3 @@
-export * from './lib/api/api.component';
+/* Public API */
+
+export * from './lib';

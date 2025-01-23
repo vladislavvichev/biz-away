@@ -1,1 +1,2 @@
-export * from './trips.http.service';
+export * from './dto';
+export * from './service';
