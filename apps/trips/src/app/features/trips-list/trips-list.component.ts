@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { map, Observable, shareReplay, Subject, tap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { map, startWith, switchMap, tap } from 'rxjs';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { TripsService } from '../../services/trips/trips.service';
 import { PageDto, SearchParamsDto } from '@biz-away/api';
 import { TripDto } from '@biz-away/api/trips/v1';
+import { PageStateManager } from '@biz-away/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
    selector: 'app-trips-list',
@@ -13,41 +15,39 @@ import { TripDto } from '@biz-away/api/trips/v1';
    changeDetection: ChangeDetectionStrategy.OnPush,
    standalone: true
 })
-export class TripsListComponent implements OnInit {
+export class TripsListComponent extends PageStateManager<TripDto> {
    // region<Dependency Injection>
    private readonly tripsService: TripsService = inject(TripsService);
    // endregion
 
-   protected state$: Subject<PageDto<TripDto>> = new Subject();
+   constructor() {
+      super();
 
-   protected page$!: Observable<PageDto<TripDto>>;
-   protected trips$!: Observable<TripDto[]>;
-
-   ngOnInit() {
-      this.tripsService
-         .searchTrips({ page: 1, limit: 10 })
+      this.stateChange$
          .pipe(
-            tap((page) => this.state$.next(page)),
-            shareReplay()
+            takeUntilDestroyed(),
+            startWith(undefined),
+            map(() => this.getSearchParams()),
+            switchMap((searchParams: SearchParamsDto) => this.tripsService.searchTrips(searchParams)),
+            tap((page: PageDto<TripDto>) => this.updateItems(page.items)),
+            tap((page: PageDto<TripDto>) => this.updateTotalItems(page.total)),
+            tap((page: PageDto<TripDto>) => console.log(page))
          )
          .subscribe();
-
-      this.trips$ = this.state$.pipe(
-         tap(console.log),
-         map((trips: PageDto<TripDto>) => trips.items),
-         shareReplay()
-      );
    }
 
    protected onPageChange(page: PageEvent): void {
-      const searchParams: SearchParamsDto = {
-         page: page.pageIndex + 1,
-         limit: page.pageSize
-      };
+      if (page.pageIndex !== this.pageIndex()) {
+         this.updatePageIndex(page.pageIndex);
+      } else {
+         this.updatePageSize(page.pageSize);
+      }
+   }
 
-      this.tripsService
-         .searchTrips(searchParams)
-         .pipe(tap((page) => this.state$.next(page)))
-         .subscribe();
+   private getSearchParams(): SearchParamsDto {
+      return {
+         page: this.pageIndex() + 1,
+         limit: this.pageSize()
+      };
    }
 }
