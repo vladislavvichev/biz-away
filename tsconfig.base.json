@@ -17,7 +17,12 @@
       "paths": {
          "@biz-away/api": ["libs/api/src/index.ts"],
          "@biz-away/core": ["libs/core/src/index.ts"],
-         "@biz-away/widgets": ["libs/widgets/src/index.ts"]
+         "@biz-away/widgets": ["libs/widgets/src/index.ts"],
+
+         /* API Versioning */
+         "@biz-away/api/trips/v1": ["libs/api/src/lib/features/trips/v1"],
+         "@biz-away/api/trips/mocks/v1": ["libs/api/src/__tests__/__mocks__/features/trips/v1"],
+
       }
    },
    "exclude": ["node_modules", "tmp"]

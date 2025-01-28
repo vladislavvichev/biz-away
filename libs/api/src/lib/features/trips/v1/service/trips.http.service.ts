@@ -1,25 +1,19 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { TripDto } from '../dto';
-import { PageDto, SearchParamsDto } from '../../../../shared';
+import { PageDto } from '../../../../shared';
+import { ApiUrl, HttpParamsObject, HttpService, HttpServiceUrl } from '@biz-away/core';
+import { environment } from '../../../../../environments/environment.dev';
 
+@ApiUrl(environment.apiUrl)
+@HttpServiceUrl('trips')
 @Injectable({ providedIn: 'root' })
-export class TripsHttpService {
-   // region<Dependency Injection>
-   private readonly httpClient: HttpClient = inject(HttpClient);
-   // endregion
+export class TripsHttpService extends HttpService {
+   constructor() {
+      super();
+   }
 
-   public search(searchParams: SearchParamsDto): Observable<PageDto<TripDto>> {
-      const params: HttpParams = new HttpParams()
-         .set('page', searchParams.page.toString())
-         .set('limit', searchParams.limit.toString());
-
-      return this.httpClient.get<PageDto<TripDto>>(
-         'https://iy3ipnv3uc.execute-api.eu-west-1.amazonaws.com/Prod/v1/trips',
-         {
-            params
-         }
-      );
+   public search(searchParams: HttpParamsObject): Observable<PageDto<TripDto>> {
+      return this.get<PageDto<TripDto>>('', 'v1', searchParams);
    }
 }

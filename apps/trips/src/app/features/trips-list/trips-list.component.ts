@@ -1,21 +1,21 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { TripDto, TripsHttpService } from '../../../../../../libs/api/src/lib/features/trips/v1';
 import { map, Observable, shareReplay, Subject, tap } from 'rxjs';
-import { TRIPS_LIST_IMPORTS } from './trips-list.imports';
-import { PageDto, SearchParamsDto } from '@biz-away/api';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { TripsService } from '../../services/trips/trips.service';
+import { PageDto, SearchParamsDto } from '@biz-away/api';
+import { TripDto } from '@biz-away/api/trips/v1';
 
 @Component({
    selector: 'app-trips-list',
    templateUrl: './trips-list.component.html',
    styleUrl: './trips-list.component.scss',
-   imports: [TRIPS_LIST_IMPORTS, MatPaginator],
+   imports: [MatPaginator],
    changeDetection: ChangeDetectionStrategy.OnPush,
    standalone: true
 })
 export class TripsListComponent implements OnInit {
    // region<Dependency Injection>
-   private readonly tripsHttpService: TripsHttpService = inject(TripsHttpService);
+   private readonly tripsService: TripsService = inject(TripsService);
    // endregion
 
    protected state$: Subject<PageDto<TripDto>> = new Subject();
@@ -24,8 +24,8 @@ export class TripsListComponent implements OnInit {
    protected trips$!: Observable<TripDto[]>;
 
    ngOnInit() {
-      this.tripsHttpService
-         .search({ page: 1, limit: 10 })
+      this.tripsService
+         .searchTrips({ page: 1, limit: 10 })
          .pipe(
             tap((page) => this.state$.next(page)),
             shareReplay()
@@ -45,8 +45,8 @@ export class TripsListComponent implements OnInit {
          limit: page.pageSize
       };
 
-      this.tripsHttpService
-         .search(searchParams)
+      this.tripsService
+         .searchTrips(searchParams)
          .pipe(tap((page) => this.state$.next(page)))
          .subscribe();
    }
