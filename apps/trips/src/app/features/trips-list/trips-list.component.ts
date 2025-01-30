@@ -46,7 +46,8 @@ export class TripsListComponent extends PageStateManager<TripDto> {
          page: this.pageIndex() + 1,
          limit: this.pageSize(),
          sortBy: this.sortOption() ?? undefined,
-         sortOrder: this.sortOption() ? this.sortDirection() ?? SortDirection.ASC : undefined
+         sortOrder: this.sortOption() ? this.sortDirection() ?? SortDirection.ASC : undefined,
+         titleFilter: this.search() ?? undefined
       };
    }
 }

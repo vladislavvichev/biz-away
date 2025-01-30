@@ -5,4 +5,5 @@ export interface PageState {
    pageSize: number;
    sortOption?: string;
    sortDirection?: SortDirection;
+   search?: string;
 }

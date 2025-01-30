@@ -1,10 +1,14 @@
-<biz-sort
-   [sortOption]="sortOption()"
-   [sortDirection]="sortDirection()"
-   [sortOptions]="SORT_OPTIONS"
-   (sortOptionChange)="updateSortOption($event)"
-   (sortDirectionChange)="updateSortDirection($event)"
-/>
+<div class="flex flex-row gap-8">
+   <biz-sort
+      [sortOption]="sortOption()"
+      [sortDirection]="sortDirection()"
+      [sortOptions]="SORT_OPTIONS"
+      (sortOptionChange)="updateSortOption($event)"
+      (sortDirectionChange)="updateSortDirection($event)"
+   />
+
+   <biz-input-search (searchValueChange)="updateSearch($event)" />
+</div>
 
 <div class="w-2/3 flex flex-col gap-6 p-20">
    @for (trip of items(); track trip.id) {

@@ -1,0 +1,13 @@
+<div class="w-full h-11 flex flex-row items-center border-default p-2 gap-3 rounded border">
+   <!-- INPUT -->
+   <input
+      [formControl]="searchFormControl"
+      [type]="'search'"
+      [placeholder]="'Search'"
+      (keyup.enter)="onManualSearch()"
+      class="input"
+   />
+
+   <!-- SEARCH ICON -->
+   <mat-icon class="mat-icon">search</mat-icon>
+</div>

@@ -1,0 +1,16 @@
+input[type='search']::-webkit-search-cancel-button {
+   display: none;
+}
+
+input:focus {
+   @apply outline-none border-none;
+}
+
+.mat-icon {
+   @apply h-6 w-6;
+   font-size: 24px;
+}
+
+.input {
+   @apply w-full;
+}

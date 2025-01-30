@@ -11,6 +11,7 @@ export abstract class PageStateManager<T> {
    protected pageSize: Signal<number> = computed(() => this._pageState().pageSize);
    protected sortOption: Signal<string | undefined> = computed(() => this._pageState().sortOption);
    protected sortDirection: Signal<SortDirection | undefined> = computed(() => this._pageState().sortDirection);
+   protected search: Signal<string | undefined> = computed(() => this._pageState().search);
    // endregion
 
    // region<Items Signals>
@@ -53,6 +54,10 @@ export abstract class PageStateManager<T> {
 
    protected updateSortDirection(sortDirection: SortDirection): void {
       this.updateStateAndNotifyChange({ sortDirection }, true);
+   }
+
+   protected updateSearch(search: string | undefined): void {
+      this.updateStateAndNotifyChange({ search }, true);
    }
 
    private updateStateAndNotifyChange(newState: Partial<PageState>, resetPageNumber: boolean = false): void {
