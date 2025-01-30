@@ -1,0 +1,14 @@
+.sort {
+   &-button {
+      @apply h-16 w-16 p-0;
+   }
+
+   &-icon {
+      @apply h-12 w-12 transition-transform;
+      font-size: 48px;
+   }
+
+   &-field {
+      --mdc-filled-text-field-container-color: transparent;
+   }
+}

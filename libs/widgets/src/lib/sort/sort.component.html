@@ -1,0 +1,22 @@
+<div class="flex flex-row">
+   <!-- SORT DIRECTION -->
+   <button mat-icon-button [color]="'primary'" (click)="onSortDirectionChange()" class="sort-button">
+      <mat-icon
+         [ngClass]="{ '-scale-y-100': sortDirection === SORT_DIRECTION.DESC }"
+         class="material-icons-round sort-icon"
+      >
+         sort
+      </mat-icon>
+   </button>
+
+   <!-- SORT OPTION -->
+   <mat-form-field class="sort-field">
+      <mat-select [value]="sortOption" [placeholder]="'Sort by'" (selectionChange)="onSortOptionChange($event)">
+         <mat-option [value]="undefined">Sort by</mat-option>
+
+         @for (option of sortOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.title }}</mat-option>
+         }
+      </mat-select>
+   </mat-form-field>
+</div>

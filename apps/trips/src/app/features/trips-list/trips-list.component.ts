@@ -3,9 +3,10 @@ import { map, startWith, switchMap, tap } from 'rxjs';
 import { TripsService } from '../../services/trips/trips.service';
 import { PageDto, SearchParamsDto } from '@biz-away/api';
 import { TripDto } from '@biz-away/api/trips/v1';
-import { PageStateManager } from '@biz-away/core';
+import { PageStateManager, SortDirection, SortOption } from '@biz-away/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TRIPS_LIST_IMPORTS } from './trips-list.imports';
+import { TripsHelper } from '../../helpers';
 
 @Component({
    selector: 'app-trips-list',
@@ -18,6 +19,10 @@ import { TRIPS_LIST_IMPORTS } from './trips-list.imports';
 export class TripsListComponent extends PageStateManager<TripDto> {
    // region<Dependency Injection>
    private readonly tripsService: TripsService = inject(TripsService);
+   // endregion
+
+   // region<Constants>
+   protected readonly SORT_OPTIONS: SortOption[] = TripsHelper.sortOptions;
    // endregion
 
    constructor() {
@@ -39,7 +44,9 @@ export class TripsListComponent extends PageStateManager<TripDto> {
    private getSearchParams(): SearchParamsDto {
       return {
          page: this.pageIndex() + 1,
-         limit: this.pageSize()
+         limit: this.pageSize(),
+         sortBy: this.sortOption() ?? undefined,
+         sortOrder: this.sortOption() ? this.sortDirection() ?? SortDirection.ASC : undefined
       };
    }
 }

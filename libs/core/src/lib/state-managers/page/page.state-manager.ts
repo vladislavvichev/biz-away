@@ -1,14 +1,16 @@
-import { PageState } from '../../domain';
+import { PageState, SortDirection } from '../../domain';
 import { computed, Signal, signal, WritableSignal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
-// TODO: Add documentation and Unit Tests
+// TODO: Add Documentation & Unit Tests
 export abstract class PageStateManager<T> {
    // region<Page State Signals>
    private _pageState: WritableSignal<PageState> = signal<PageState>(this.initialState);
 
    protected pageIndex: Signal<number> = computed(() => this._pageState().pageIndex);
    protected pageSize: Signal<number> = computed(() => this._pageState().pageSize);
+   protected sortOption: Signal<string | undefined> = computed(() => this._pageState().sortOption);
+   protected sortDirection: Signal<SortDirection | undefined> = computed(() => this._pageState().sortDirection);
    // endregion
 
    // region<Items Signals>
@@ -45,8 +47,20 @@ export abstract class PageStateManager<T> {
       this.updateStateAndNotifyChange({ pageSize });
    }
 
-   private updateStateAndNotifyChange(newState: Partial<PageState>): void {
-      this._pageState.update((currentState: PageState) => ({ ...currentState, ...newState }));
+   protected updateSortOption(sortOption: string | undefined): void {
+      this.updateStateAndNotifyChange({ sortOption }, true);
+   }
+
+   protected updateSortDirection(sortDirection: SortDirection): void {
+      this.updateStateAndNotifyChange({ sortDirection }, true);
+   }
+
+   private updateStateAndNotifyChange(newState: Partial<PageState>, resetPageNumber: boolean = false): void {
+      if (resetPageNumber) {
+         this._pageState.update((currentState: PageState) => ({ ...currentState, ...newState, pageIndex: 0 }));
+      } else {
+         this._pageState.update((currentState: PageState) => ({ ...currentState, ...newState }));
+      }
 
       this._stateChangeSubject$.next();
    }
