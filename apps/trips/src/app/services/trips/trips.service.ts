@@ -27,6 +27,16 @@ export class TripsService {
    }
 
    /**
+    * @description - Obtains the details of a **Trip** using the provided **Trip** `id`.
+    *
+    * @param tripId - The `id`.
+    * @returns The **Trip** details.
+    */
+   public getTrip(tripId: string): Observable<TripDto> {
+      return this.tripsHttpService.getById(tripId);
+   }
+
+   /**
     * @description - Maps an `Array` of `TripDto` to an array of `Trip`, calculating and adding the **Score** for each trip.
     *
     * @param trips - The `Array` of `TripDto`.

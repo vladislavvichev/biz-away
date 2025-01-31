@@ -16,4 +16,8 @@ export class TripsHttpService extends HttpService {
    public search(searchParams: HttpParamsObject): Observable<PageDto<TripDto>> {
       return this.get<PageDto<TripDto>>('', 'v1', searchParams);
    }
+
+   public getById(id: string): Observable<TripDto> {
+      return this.get<TripDto>(`${id}`, 'v1');
+   }
 }
