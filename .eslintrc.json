@@ -19,13 +19,7 @@
                   ]
                }
             ],
-            "@typescript-eslint/no-inferrable-types": [
-               "off",
-               {
-                  "ignoreParameters": true,
-                  "ignoreProperties": true
-               }
-            ]
+            "@typescript-eslint/no-inferrable-types": "off"
          }
       },
       {

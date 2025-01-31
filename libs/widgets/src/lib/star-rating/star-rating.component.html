@@ -2,13 +2,15 @@
    <!-- RATING -->
    <div class="flex flex-row gap-2">
       @for (star of stars; track star) {
-         @if (star === 1) {
-            <mat-icon class="material-icons-round">star</mat-icon>
-         } @else if (star === 0) {
-            <mat-icon class="material-icons-round">star_border</mat-icon>
-         } @else {
-            <mat-icon class="material-icons-round">star_half</mat-icon>
-         }
+         <mat-icon class="material-icons-round">
+            @if (star === 1) {
+               star
+            } @else if (star === 0) {
+               star_border
+            } @else {
+               star_half
+            }
+         </mat-icon>
       }
    </div>
 

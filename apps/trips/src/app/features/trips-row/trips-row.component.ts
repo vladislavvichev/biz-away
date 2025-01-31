@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { TripDto } from '@biz-away/api/trips/v1';
 import { TRIPS_ROW_IMPORTS } from './trips-row.imports';
+import { Trip } from '../../domain';
 
 // TODO: Add Documentation & Unit Tests.
 @Component({
@@ -12,5 +12,5 @@ import { TRIPS_ROW_IMPORTS } from './trips-row.imports';
    standalone: true
 })
 export class TripsRowComponent {
-   @Input({ required: true }) trip!: TripDto;
+   @Input({ required: true }) trip!: Trip;
 }

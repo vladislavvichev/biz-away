@@ -3,3 +3,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.mat-typography {
+   & h1,
+   h2 {
+      margin: 0 !important;
+   }
+}
