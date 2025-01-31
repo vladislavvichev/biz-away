@@ -1,5 +1,5 @@
 {
-   "extends": ["../.eslintrc.json"],
+   "extends": ["../../.eslintrc.json"],
    "ignorePatterns": ["!**/*"],
    "overrides": [
       {
@@ -21,7 +21,8 @@
                   "prefix": "lib",
                   "style": "kebab-case"
                }
-            ]
+            ],
+            "@typescript-eslint/no-inferrable-types": "off"
          }
       },
       {

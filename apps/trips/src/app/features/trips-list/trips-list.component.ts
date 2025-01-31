@@ -33,7 +33,7 @@ export class TripsListComponent extends PageStateManager<Trip, TripsFilter> {
    // endregion
 
    constructor() {
-      super();
+      super('trips-list-page-state');
 
       this.stateChange$
          .pipe(

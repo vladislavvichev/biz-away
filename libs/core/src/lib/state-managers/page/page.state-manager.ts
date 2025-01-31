@@ -1,11 +1,16 @@
 import { PageState, PageStatus, SortDirection } from '../../domain';
-import { computed, Signal, signal, WritableSignal } from '@angular/core';
+import { computed, inject, Signal, signal, WritableSignal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { LocalStorageService } from '../../services';
 
 // TODO: Add Documentation & Unit Tests
 export abstract class PageStateManager<T, U> {
+   // region<Dependency Injection>
+   private readonly localStorageService: LocalStorageService = inject(LocalStorageService);
+   // endregion
+
    // region<Page State Signals>
-   private _pageState: WritableSignal<PageState> = signal<PageState>(this.initialState);
+   private _pageState: WritableSignal<PageState>;
 
    protected pageIndex: Signal<number> = computed(() => this._pageState().pageIndex);
    protected pageSize: Signal<number> = computed(() => this._pageState().pageSize);
@@ -28,7 +33,21 @@ export abstract class PageStateManager<T, U> {
    private _stateChangeSubject$: Subject<void> = new Subject<void>();
    // endregion
 
-   protected constructor() {}
+   private _storeId: string | undefined;
+
+   protected constructor(storeId?: string) {
+      this._storeId = storeId;
+
+      const savedState: PageState | null = storeId ? this.localStorageService.get(storeId) : null;
+
+      this._pageState = signal<PageState>(
+         {
+            ...this.initialState,
+            sortOption: savedState?.sortOption ?? undefined,
+            sortDirection: savedState?.sortDirection ?? undefined
+         } ?? this.initialState
+      );
+   }
 
    // region<Getters & Setters>
    protected get filter(): Signal<U | undefined> {
@@ -62,10 +81,21 @@ export abstract class PageStateManager<T, U> {
    }
 
    protected updateSortOption(sortOption: string | undefined): void {
+      if (this._storeId) {
+         this.saveStateInStorage(this._storeId, {
+            sortOption,
+            sortDirection: this.sortDirection() ?? SortDirection.ASC
+         });
+      }
+
       this.updateStateAndNotifyChange({ sortOption }, true);
    }
 
    protected updateSortDirection(sortDirection: SortDirection): void {
+      if (this._storeId) {
+         this.saveStateInStorage(this._storeId, { sortOption: this.sortOption(), sortDirection });
+      }
+
       this.updateStateAndNotifyChange({ sortDirection }, true);
    }
 
@@ -81,6 +111,10 @@ export abstract class PageStateManager<T, U> {
       }
 
       this._stateChangeSubject$.next();
+   }
+
+   private saveStateInStorage(key: string, newState: Partial<PageState>): void {
+      this.localStorageService.update<Partial<PageState>>(key, newState);
    }
 
    // region<Filter Update Methods>
