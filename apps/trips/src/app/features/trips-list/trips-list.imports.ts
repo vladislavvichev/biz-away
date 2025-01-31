@@ -1,6 +1,6 @@
 import { ComponentImport } from '@biz-away/core';
 import { CommonModule } from '@angular/common';
-import { InputSearchComponent, PaginatorComponent, SortComponent } from '@biz-away/widgets';
+import { InputSearchComponent, LoadingSpinnerComponent, PaginatorComponent, SortComponent } from '@biz-away/widgets';
 import { TripsFilterComponent } from '../trips-filter';
 
 export const TRIPS_LIST_IMPORTS: ComponentImport[] = [
@@ -8,5 +8,6 @@ export const TRIPS_LIST_IMPORTS: ComponentImport[] = [
    TripsFilterComponent,
    PaginatorComponent,
    SortComponent,
-   InputSearchComponent
+   InputSearchComponent,
+   LoadingSpinnerComponent
 ];

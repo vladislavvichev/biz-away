@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { map, startWith, switchMap, tap } from 'rxjs';
+import { filter, map, Observable, of, startWith, switchMap, tap } from 'rxjs';
 import { TripsService } from '../../services/trips/trips.service';
 import { PageDto } from '@biz-away/api';
 import { TripDto, TripsSearchParamsDto } from '@biz-away/api/trips/v1';
-import { PageStateManager, SortDirection, SortOption } from '@biz-away/core';
+import { PageStateManager, PageStatus, SortDirection, SortOption } from '@biz-away/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TRIPS_LIST_IMPORTS } from './trips-list.imports';
 import { TripsHelper } from '../../helpers';
 import { TripsFilter } from '../../domain';
+import { catchError } from 'rxjs/operators';
 
+// TODO: Add Documentation & Unit Tests
 @Component({
    selector: 'app-trips-list',
    templateUrl: './trips-list.component.html',
@@ -22,6 +24,10 @@ export class TripsListComponent extends PageStateManager<TripDto, TripsFilter> {
    private readonly tripsService: TripsService = inject(TripsService);
    // endregion
 
+   // region<Types>
+   protected readonly PAGE_STATUS: typeof PageStatus = PageStatus;
+   // endregion
+
    // region<Constants>
    protected readonly SORT_OPTIONS: SortOption[] = TripsHelper.sortOptions;
    // endregion
@@ -33,15 +39,28 @@ export class TripsListComponent extends PageStateManager<TripDto, TripsFilter> {
          .pipe(
             takeUntilDestroyed(),
             startWith(undefined),
+            tap(() => this.updateStatus(PageStatus.LOADING)),
             map(() => this.getSearchParams()),
-            switchMap((searchParams: TripsSearchParamsDto) => this.tripsService.searchTrips(searchParams)),
+            switchMap((searchParams: TripsSearchParamsDto) =>
+               this.tripsService.searchTrips(searchParams).pipe(catchError(() => this.handleSearchError()))
+            ),
             tap((page: PageDto<TripDto>) => this.updateItems(page.items)),
             tap((page: PageDto<TripDto>) => this.updateTotalItems(page.total)),
-            tap((page: PageDto<TripDto>) => console.log(page))
+            tap((page: PageDto<TripDto>) => console.log(page)),
+            filter(() => this.status() !== PageStatus.ERROR),
+            tap(() => this.updateStatus(PageStatus.VALID))
          )
          .subscribe();
    }
 
+   // TODO: Move method to a Helper?
+   private handleSearchError(): Observable<PageDto<TripDto>> {
+      this.updateStatus(PageStatus.ERROR);
+
+      return of({ items: [], total: 0, limit: 0, page: 0 });
+   }
+
+   // TODO: Move method to a Helper?
    private getSearchParams(): TripsSearchParamsDto {
       return {
          page: this.pageIndex() + 1,

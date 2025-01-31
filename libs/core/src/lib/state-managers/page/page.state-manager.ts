@@ -1,4 +1,4 @@
-import { PageState, SortDirection } from '../../domain';
+import { PageState, PageStatus, SortDirection } from '../../domain';
 import { computed, Signal, signal, WritableSignal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
@@ -21,6 +21,7 @@ export abstract class PageStateManager<T, U> {
    // region<Items Signals>
    private _items: WritableSignal<T[]> = signal<T[]>([]);
    private _totalItems: WritableSignal<number> = signal<number>(0);
+   private _status: WritableSignal<PageStatus> = signal<PageStatus>(PageStatus.LOADING);
    // endregion
 
    // region<State Change>
@@ -40,6 +41,10 @@ export abstract class PageStateManager<T, U> {
 
    protected get totalItems(): Signal<number> {
       return this._totalItems.asReadonly();
+   }
+
+   protected get status(): Signal<PageStatus> {
+      return this._status.asReadonly();
    }
 
    protected get stateChange$(): Observable<void> {
@@ -98,6 +103,10 @@ export abstract class PageStateManager<T, U> {
 
    protected updateTotalItems(totalItems: number): void {
       this._totalItems.set(totalItems);
+   }
+
+   protected updateStatus(status: PageStatus): void {
+      this._status.set(status);
    }
 
    // endregion
