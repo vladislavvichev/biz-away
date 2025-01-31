@@ -33,7 +33,7 @@ export abstract class PageStateManager<T, U> {
    private _stateChangeSubject$: Subject<void> = new Subject<void>();
    // endregion
 
-   private _storeId: string | undefined;
+   private readonly _storeId: string | undefined;
 
    protected constructor(storeId?: string) {
       this._storeId = storeId;
@@ -117,6 +117,8 @@ export abstract class PageStateManager<T, U> {
       this.localStorageService.update<Partial<PageState>>(key, newState);
    }
 
+   // endregion
+
    // region<Filter Update Methods>
 
    protected updateFilter(filter: U | undefined): void {
@@ -142,8 +144,6 @@ export abstract class PageStateManager<T, U> {
    protected updateStatus(status: PageStatus): void {
       this._status.set(status);
    }
-
-   // endregion
 
    // endregion
 

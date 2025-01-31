@@ -37,6 +37,15 @@ export class TripsService {
    }
 
    /**
+    * @description - Obtains the **Trip of the Day**.
+    *
+    * @returns The **Trip of the Day**.
+    */
+   public getTripHighlighted(): Observable<TripDto> {
+      return this.tripsHttpService.getHighlighted();
+   }
+
+   /**
     * @description - Maps an `Array` of `TripDto` to an array of `Trip`, calculating and adding the **Score** for each trip.
     *
     * @param trips - The `Array` of `TripDto`.

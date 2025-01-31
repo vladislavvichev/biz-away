@@ -20,4 +20,8 @@ export class TripsHttpService extends HttpService {
    public getById(id: string): Observable<TripDto> {
       return this.get<TripDto>(`${id}`, 'v1');
    }
+
+   public getHighlighted(): Observable<TripDto> {
+      return this.get<TripDto>('random/trip-of-the-day', 'v1');
+   }
 }

@@ -44,7 +44,6 @@ export class TripsListComponent extends PageStateManager<Trip, TripsFilter> {
             switchMap((searchParams: TripsSearchParamsDto) =>
                this.tripsService.searchTrips(searchParams).pipe(catchError(() => this.handleSearchError()))
             ),
-            tap((page: PageDto<TripDto>) => console.log(page)),
             tap((page: PageDto<TripDto>) => this.updateTotalItems(page.total)),
             map((page: PageDto<TripDto>) => this.tripsService.mapTripsAndCalculateScores(page.items)),
             tap((trips: Trip[]) => this.updateItems(trips)),
