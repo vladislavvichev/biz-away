@@ -1,20 +1,28 @@
-<div class="flex flex-col gap-2 border-2 border-blue-900 rounded-xl p-4 hover:shadow-lg transition-all">
+<!-- CONTAINER -->
+<div class="trips-row">
+   <!-- INNER CONTAINER -->
    <div class="flex flex-row gap-2">
-      <img [src]="trip.thumbnailUrl" [alt]="trip.title" style="height: 150px; width: 150px; object-fit: cover" />
+      <!-- IMAGE -->
+      <biz-image [source]="trip.thumbnailUrl" [alt]="trip.title" />
 
       <div class="w-full flex flex-col justify-between">
+         <!-- TITLE & SCORE -->
          <div class="flex flex-row items-center justify-between">
             <h1>{{ trip.title }}</h1>
 
             <app-trips-score [score]="trip.score" />
          </div>
 
+         <!-- TAGE -->
          <biz-tag-list [tags]="trip.tags" />
 
+         <!-- PRICE -->
          <div class="flex flex-row justify-end">
             <h2>{{ trip.price | currency: 'EUR' : undefined : undefined : 'es' }}</h2>
          </div>
       </div>
    </div>
+
+   <!-- RATING -->
    <biz-star-rating [rating]="trip.rating" [totalReviews]="trip.nrOfRatings" />
 </div>

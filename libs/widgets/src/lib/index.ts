@@ -1,4 +1,5 @@
 export * from './domain';
+export * from './image';
 export * from './inputs';
 export * from './layouts';
 export * from './page';

@@ -16,7 +16,15 @@
             "polyfills": ["zone.js"],
             "tsConfig": "apps/trips/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["apps/trips/src/favicon.ico", "apps/trips/src/assets"],
+            "assets": [
+               "apps/trips/src/favicon.ico",
+               "apps/trips/src/assets",
+               {
+                  "glob": "**/*",
+                  "input": "./libs/assets/",
+                  "output": "./assets"
+               }
+            ],
             "styles": ["apps/trips/src/styles.scss", "@angular/material/prebuilt-themes/indigo-pink.css"],
             "scripts": []
          },
