@@ -3,5 +3,4 @@ export interface SearchParamsDto {
    limit: number;
    sortBy?: string;
    sortOrder?: string;
-   titleFilter?: string;
 }

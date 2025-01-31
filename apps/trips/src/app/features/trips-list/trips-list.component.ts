@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { map, startWith, switchMap, tap } from 'rxjs';
 import { TripsService } from '../../services/trips/trips.service';
-import { PageDto, SearchParamsDto } from '@biz-away/api';
-import { TripDto } from '@biz-away/api/trips/v1';
+import { PageDto } from '@biz-away/api';
+import { TripDto, TripsSearchParamsDto } from '@biz-away/api/trips/v1';
 import { PageStateManager, SortDirection, SortOption } from '@biz-away/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TRIPS_LIST_IMPORTS } from './trips-list.imports';
 import { TripsHelper } from '../../helpers';
+import { TripsFilter } from '../../domain';
 
 @Component({
    selector: 'app-trips-list',
@@ -16,7 +17,7 @@ import { TripsHelper } from '../../helpers';
    changeDetection: ChangeDetectionStrategy.OnPush,
    standalone: true
 })
-export class TripsListComponent extends PageStateManager<TripDto> {
+export class TripsListComponent extends PageStateManager<TripDto, TripsFilter> {
    // region<Dependency Injection>
    private readonly tripsService: TripsService = inject(TripsService);
    // endregion
@@ -33,7 +34,7 @@ export class TripsListComponent extends PageStateManager<TripDto> {
             takeUntilDestroyed(),
             startWith(undefined),
             map(() => this.getSearchParams()),
-            switchMap((searchParams: SearchParamsDto) => this.tripsService.searchTrips(searchParams)),
+            switchMap((searchParams: TripsSearchParamsDto) => this.tripsService.searchTrips(searchParams)),
             tap((page: PageDto<TripDto>) => this.updateItems(page.items)),
             tap((page: PageDto<TripDto>) => this.updateTotalItems(page.total)),
             tap((page: PageDto<TripDto>) => console.log(page))
@@ -41,13 +42,17 @@ export class TripsListComponent extends PageStateManager<TripDto> {
          .subscribe();
    }
 
-   private getSearchParams(): SearchParamsDto {
+   private getSearchParams(): TripsSearchParamsDto {
       return {
          page: this.pageIndex() + 1,
          limit: this.pageSize(),
          sortBy: this.sortOption() ?? undefined,
          sortOrder: this.sortOption() ? this.sortDirection() ?? SortDirection.ASC : undefined,
-         titleFilter: this.search() ?? undefined
+         titleFilter: this.search() ?? undefined,
+         minRating: this.filter()?.minRating ?? undefined,
+         minPrice: this.filter()?.minPrice ?? undefined,
+         maxPrice: this.filter()?.maxPrice ?? undefined,
+         tags: this.filter()?.tags ?? undefined
       };
    }
 }

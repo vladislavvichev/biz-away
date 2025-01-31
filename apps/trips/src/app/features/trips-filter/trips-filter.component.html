@@ -1,0 +1,47 @@
+<form [formGroup]="formGroup" class="flex flex-col gap-4">
+   <!-- RATING -->
+   <div class="flex flex-col">
+      <mat-label>Rating</mat-label>
+      <mat-slider [discrete]="true" [showTickMarks]="true" [min]="1" [max]="5" [step]="0.5">
+         <input [formControlName]="'rating'" matSliderThumb />
+      </mat-slider>
+   </div>
+
+   <!-- PRICE -->
+   <div class="flex flex-col">
+      <mat-label>Price</mat-label>
+      <mat-slider [discrete]="true" [min]="0" [max]="10000" [step]="100">
+         <input [formControlName]="'minPrice'" matSliderStartThumb />
+         <input [formControlName]="'maxPrice'" matSliderEndThumb />
+      </mat-slider>
+   </div>
+
+   <!-- TAGS -->
+   <mat-form-field>
+      <mat-label>Tags</mat-label>
+
+      <mat-chip-grid #chipGrid>
+         @for (tag of formGroup.controls.tags.value; track tag) {
+            <mat-chip-row (removed)="removeTag(tag)" [editable]="false">
+               {{ tag }}
+               <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+               </button>
+            </mat-chip-row>
+         }
+         <input
+            [disabled]="formGroup.controls.tags.value.length >= 5"
+            [placeholder]="'Add a tag'"
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="addTag($event)"
+         />
+      </mat-chip-grid>
+   </mat-form-field>
+</form>
+
+<div class="flex flex-row justify-end gap-4">
+   <button [color]="'accent'" (click)="onReset()" mat-stroked-button>Reset</button>
+   <button [color]="'primary'" (click)="onAccept()" mat-flat-button>Apply</button>
+</div>

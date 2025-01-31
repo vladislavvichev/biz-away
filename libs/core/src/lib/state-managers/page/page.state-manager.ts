@@ -3,7 +3,7 @@ import { computed, Signal, signal, WritableSignal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 // TODO: Add Documentation & Unit Tests
-export abstract class PageStateManager<T> {
+export abstract class PageStateManager<T, U> {
    // region<Page State Signals>
    private _pageState: WritableSignal<PageState> = signal<PageState>(this.initialState);
 
@@ -12,6 +12,10 @@ export abstract class PageStateManager<T> {
    protected sortOption: Signal<string | undefined> = computed(() => this._pageState().sortOption);
    protected sortDirection: Signal<SortDirection | undefined> = computed(() => this._pageState().sortDirection);
    protected search: Signal<string | undefined> = computed(() => this._pageState().search);
+   // endregion
+
+   // region<Filter Signals>
+   private _filter: WritableSignal<U | undefined> = signal<U | undefined>(undefined);
    // endregion
 
    // region<Items Signals>
@@ -26,6 +30,10 @@ export abstract class PageStateManager<T> {
    protected constructor() {}
 
    // region<Getters & Setters>
+   protected get filter(): Signal<U | undefined> {
+      return this._filter.asReadonly();
+   }
+
    protected get items(): Signal<T[]> {
       return this._items.asReadonly();
    }
@@ -69,6 +77,18 @@ export abstract class PageStateManager<T> {
 
       this._stateChangeSubject$.next();
    }
+
+   // region<Filter Update Methods>
+
+   protected updateFilter(filter: U | undefined): void {
+      this._filter.set(filter);
+
+      this._pageState.update((currentState: PageState) => ({ ...currentState, pageIndex: 0 }));
+
+      this._stateChangeSubject$.next();
+   }
+
+   // endregion
 
    // region<Items Update Methods>
 
