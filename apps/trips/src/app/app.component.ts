@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { APP_IMPORTS } from './app.imports';
 
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeEs, 'es');
+
 @Component({
    selector: 'app-root',
    templateUrl: './app.component.html',

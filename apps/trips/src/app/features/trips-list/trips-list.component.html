@@ -11,6 +11,7 @@
 <!-- TODO: Create an error component -->
 <!-- TODO: Create an empty page component -->
 <!-- TODO: Create a trips-row component -->
+<!-- TODO: Disable all elements while loading -->
 
 <div class="flex flex-row gap-8">
    <biz-sort
@@ -28,10 +29,7 @@
    <div class="w-2/3 flex flex-col gap-6 p-20">
       @if (status() === PAGE_STATUS.VALID) {
          @for (trip of items(); track trip.id) {
-            <div class="flex flex-col gap-2 border-2 border-blue-900 rounded-xl p-4 hover:shadow-lg transition-all">
-               <span>{{ trip.title }}</span>
-               <span>{{ trip.description }}</span>
-            </div>
+            <app-trips-row [trip]="trip" />
          }
       } @else if (status() === PAGE_STATUS.LOADING) {
          <biz-loading-spinner />
