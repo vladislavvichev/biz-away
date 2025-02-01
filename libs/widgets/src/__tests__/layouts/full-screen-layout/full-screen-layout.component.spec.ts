@@ -35,7 +35,7 @@ describe('FullScreenLayoutComponent', () => {
    it('should render the container', () => {
       /* Arrange */
       fixture.detectChanges();
-      const container: DebugElement = debugElement.query(By.css('.w-screen.h-screen'));
+      const container: DebugElement = debugElement.query(By.css('.w-full.h-screen'));
 
       /* Assert */
       expect(container).toBeTruthy();

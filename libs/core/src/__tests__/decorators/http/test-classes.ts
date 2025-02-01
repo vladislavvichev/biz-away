@@ -1,6 +1,8 @@
 // Test class that extends HttpService
 import { HttpService } from '../../../lib';
+import { Injectable } from '@angular/core';
 
+@Injectable({ providedIn: 'root' })
 export class TestClassExtendsHttpService extends HttpService {
    constructor() {
       super();
@@ -8,6 +10,7 @@ export class TestClassExtendsHttpService extends HttpService {
 }
 
 // Another test class that extends HttpService
+@Injectable({ providedIn: 'root' })
 export class TestClassExtendsHttpService2 extends HttpService {
    constructor() {
       super();
@@ -15,6 +18,7 @@ export class TestClassExtendsHttpService2 extends HttpService {
 }
 
 // Test class with properties and methods that extends HttpService
+@Injectable({ providedIn: 'root' })
 export class TestClassWithProperties extends HttpService {
    public testProperty: string = 'test';
 

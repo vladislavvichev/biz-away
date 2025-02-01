@@ -5,8 +5,17 @@ import {
    TestClassNoExtend,
    TestClassWithProperties
 } from './test-classes';
+import { TestBed } from '@angular/core/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('HttpServiceUrl Decorator', () => {
+   beforeEach(() => {
+      TestBed.configureTestingModule({
+         providers: [provideHttpClient(), provideHttpClientTesting()]
+      });
+   });
+
    it('should assign httpServiceUrl to a class extending HttpService', () => {
       /* Arrange */
       const testUrl: string = 'test';
@@ -36,7 +45,7 @@ describe('HttpServiceUrl Decorator', () => {
       /* Act */
       ApiUrl('testApiUrl')(TestClassWithProperties);
       HttpServiceUrl(testUrl)(TestClassWithProperties);
-      const testClassInstance: TestClassWithProperties = new TestClassWithProperties();
+      const testClassInstance: TestClassWithProperties = TestBed.inject(TestClassWithProperties);
 
       /* Assert */
       expect(testClassInstance.testProperty).toBe('test');
